@@ -131,7 +131,6 @@ TEMPLATE = """
 
 ARCHIVE_CACHE_FILE = "archive_playlists.json"
 ART_DIR = "static/art"
-DOWNLOADS_DIR = "downloads"
 
 def save_archive_cache(data):
     with open(ARCHIVE_CACHE_FILE, "w") as f:
@@ -158,32 +157,6 @@ def download_image(url, filename):
         except Exception as e:
             print(f"Failed to download {url}: {e}")
             return None
-    return local_path
-
-def download_mp3(url, show_date_str):
-    if not url:
-        return None
-    os.makedirs(DOWNLOADS_DIR, exist_ok=True)
-    # Use "The Roadhouse - YYYY-MM-DD.mp3" as filename
-    filename = f"The Roadhouse - {show_date_str}.mp3"
-    local_path = os.path.join(DOWNLOADS_DIR, filename)
-    if not os.path.exists(local_path):
-        try:
-            resp = requests.get(url, stream=True, timeout=30)
-            if resp.status_code == 200:
-                with open(local_path, "wb") as f:
-                    for chunk in resp.iter_content(chunk_size=8192):
-                        if chunk:
-                            f.write(chunk)
-                print(f"Downloaded: {local_path}")
-                return local_path
-            else:
-                print(f"Failed to download {url}: status {resp.status_code}")
-        except Exception as e:
-            print(f"Failed to download {url}: {e}")
-            return None
-    else:
-        print(f"Already downloaded: {local_path}")
     return local_path
 
 def sanitize_filename(s):
@@ -271,12 +244,6 @@ def index():
 
     # Recent shows are always live
     recent_shows = build_show_list(recent_sundays)
-
-    # Download the two available MP3s if not already present
-    for show in recent_shows:
-        url = show["url"]
-        show_date_str = datetime.strptime(show["date"], "%B %d, %Y").strftime("%Y-%m-%d")
-        download_mp3(url, show_date_str)
 
     # Archive shows: cache to disk and download art locally
     archive_shows = load_archive_cache()
