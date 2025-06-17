@@ -275,7 +275,6 @@ def index():
     # Download the two available MP3s if not already present
     for show in recent_shows:
         url = show["url"]
-        # show["date"] is like "June 15, 2025", convert to YYYY-MM-DD
         show_date_str = datetime.strptime(show["date"], "%B %d, %Y").strftime("%Y-%m-%d")
         download_mp3(url, show_date_str)
 
