@@ -315,26 +315,6 @@ def get_last_two_sundays():
     prev_sunday = last_sunday - timedelta(days=7)
     return [last_sunday, prev_sunday]
 
-@app.route("/listen")
-def listen():
-    sundays = get_last_two_sundays()
-    shows = []
-    for show_date in sundays:
-        digit = get_roadhouse_digit(show_date)
-        url = build_roadhouse_url(show_date, digit)
-        shows.append({"date": show_date.strftime("%B %d, %Y"), "url": url})
-    return render_template_string("""
-    <h1>The Roadhouse – Listen to Recent Shows</h1>
-    {% for show in shows %}
-      <h2>{{ show.date }}</h2>
-      <audio controls style="width:100%;margin-bottom:1em;">
-        <source src="{{ show.url }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-      <p><a href="{{ show.url }}">Download MP3</a></p>
-    {% endfor %}
-    """, shows=shows)
-
 def fetch_roadhouse_playlist(start_dt, end_dt, max_pages=5):
     base_url = (
         "https://api.kexp.org/v2/plays/"
