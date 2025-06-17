@@ -7,6 +7,7 @@ import urllib.parse
 import json
 import os
 import shutil
+import re
 
 app = Flask(__name__)
 
@@ -185,6 +186,10 @@ def download_mp3(url, show_date_str):
         print(f"Already downloaded: {local_path}")
     return local_path
 
+def sanitize_filename(s):
+    # Remove or replace invalid filename characters
+    return re.sub(r'[\\/*?:"<>|]', "_", s)
+
 def format_song(item, local_art=False):
     # Format time as am/pm
     airdate = item.get("airdate", "")
@@ -213,10 +218,10 @@ def format_song(item, local_art=False):
     art_url = item.get("image_uri", "")
     if local_art and art_url:
         ext = os.path.splitext(art_url)[-1].split("?")[0]
-        filename = f"{artist}_{song}_{year}{ext}".replace(" ", "_").replace("/", "_")
+        filename = sanitize_filename(f"{artist}_{song}_{year}{ext}")
         local_path = download_image(art_url, filename)
         if local_path:
-            art_url = "/" + local_path  # Flask static path
+            art_url = f"/static/art/{filename}"
     return {
         "time": time_str,
         "title": song,
