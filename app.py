@@ -162,6 +162,7 @@ TEMPLATE = """
 
 ARCHIVE_CACHE_FILE = "archive_playlists.json"
 ART_DIR = "static/art"
+# Force Update
 
 def save_archive_cache(data):
     with open(ARCHIVE_CACHE_FILE, "w") as f:
