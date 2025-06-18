@@ -17,15 +17,46 @@ TEMPLATE = """
 <head>
     <title>KEXP Playlist</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #2b2a33; 
+            color: #eee;
+        }
         table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 8px; }
-        th { background: #eee; }
+        th, td { border: 1px solid #333; padding: 8px; }
+        th { background: #222; color: #fff; }
+        td { background: #181818; }
         img { max-width: 60px; }
-        .comment { font-size: 0.95em; color: #444; }
+        .comment { font-size: 0.95em; color: #aaa; }
         .audio-section { margin-bottom: 2em; }
         .playlist-table { margin-bottom: 2em; }
-        .show-btn { margin-bottom: 1em; }
+        .show-btn { 
+            margin-bottom: 1em; 
+            background: #42414d; 
+            color: #fff; 
+            border: 1px solid #333; 
+            padding: 6px 12px; 
+            cursor: pointer; 
+        }
+        .show-btn:hover { background: #333; }
+        a { color: #7ecfff; }
+        a:visited { color: #b0cfff; }
+        audio {
+            background: #42414d;
+            border-radius: 6px;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+        audio::-webkit-media-controls-panel {
+            background-color: #42414d;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-timeline,
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display,
+        audio::-webkit-media-controls-volume-slider {
+            filter: invert(1);
+        }
     </style>
     <script>
       function togglePlaylist(id) {
