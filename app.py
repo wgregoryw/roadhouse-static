@@ -96,7 +96,7 @@ TEMPLATE = """
                     <td>{{ song.time }}</td>
                     <td>
                         {% if song.art_url %}
-                            <img src="{{ song.art_url }}" onerror="this.style.display='none';">
+                            <img src="{{ song.art_url }}" loading="lazy" onerror="this.style.display='none';">
                         {% endif %}
                     </td>
                     <td>
@@ -137,7 +137,7 @@ TEMPLATE = """
                       <td>{{ song.time }}</td>
                       <td>
                           {% if song.art_url %}
-                              <img src="{{ song.art_url }}" onerror="this.style.display='none';">
+                              <img src="{{ song.art_url }}" loading="lazy" onerror="this.style.display='none';">
                           {% endif %}
                       </td>
                       <td>
