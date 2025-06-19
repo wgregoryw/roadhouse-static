@@ -3,7 +3,12 @@ name: Build and Deploy Static Site
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 18 * * 0'  # Every Sunday at 18:30 UTC
+    - cron: '30 18 * * 0'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -24,14 +29,9 @@ jobs:
       - name: Generate static site
         run: python generate_static.py
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: output/
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./output
+          publish_branch: gh-pages
