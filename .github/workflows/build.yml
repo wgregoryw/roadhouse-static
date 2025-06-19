@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '30 18 * * 0'
+  # Test
 
 permissions:
   contents: write
