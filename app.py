@@ -257,14 +257,20 @@ def index():
     def build_show_list(show_dates, local_art=False):
         shows = []
         for show_date in reversed(show_dates):  # Most recent first
-            digit = get_roadhouse_digit(show_date)
-            url = build_roadhouse_url(show_date, digit)
             date_str = show_date.strftime("%Y-%m-%d")
             start_dt = f"{date_str}T09:00:00-07:00"
             end_dt = f"{date_str}T12:00:00-07:00"
             api_results = fetch_roadhouse_playlist(start_dt, end_dt)
             songs = [format_song(item, local_art=local_art) for item in api_results]
             songs = list(reversed(songs))
+
+            # Manually set the URL for June 22, 2025
+            if show_date == date(2025, 6, 22):
+                url = "https://kexp-archive.streamguys1.com/content/kexp/20250622085006-30-1961-the-roadhouse.mp3"
+            else:
+                digit = get_roadhouse_digit(show_date)
+                url = build_roadhouse_url(show_date, digit)
+
             shows.append({
                 "date": show_date.strftime("%B %d, %Y"),
                 "url": url,
@@ -278,7 +284,16 @@ def index():
 
     # Archive shows: cache to disk and download art locally
     archive_shows = load_archive_cache()
-    if archive_shows is None:
+
+    # Check if the cache is stale and needs rebuilding
+    cached_show_ids = set()
+    if archive_shows:
+        cached_show_ids = {show['id'] for show in archive_shows}
+    
+    expected_show_ids = {s.strftime('%Y%m%d') for s in archive_sundays}
+
+    if expected_show_ids != cached_show_ids:
+        print("Rebuilding archive cache...")
         archive_shows = build_show_list(archive_sundays, local_art=True)
         save_archive_cache(archive_shows)
 
